@@ -5,5 +5,7 @@
 # set_property HD.TANDEM 1 $master_cfg_site
 # add_cells_to_pblock [get_pblocks -of_objects [get_sites $master_cfg_site]] $master_cfg_site
 
+# https://support.xilinx.com/s/article/65940?language=en_US
+
 set_property HD.TANDEM_IP_PBLOCK Stage1_Main [get_cells dbg_hub/inst/BSCANID.u_xsdbm_id/SWITCH_N_EXT_BSCAN.bscan_inst/SERIES7_BSCAN.bscan_inst]
 add_cells_to_pblock [get_pblocks -of_object [get_sites CONFIG_SITE_X0Y0]] [get_cells dbg_hub/inst/BSCANID.u_xsdbm_id/SWITCH_N_EXT_BSCAN.bscan_inst/SERIES7_BSCAN.bscan_inst]

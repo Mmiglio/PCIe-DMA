@@ -17,11 +17,12 @@ entity top_kcu is
 end top_kcu;
 
 architecture arch of top_kcu is
-
+  
   -- Registers
   constant reg_addr_width : natural := 4;
   signal read_reg         : slave_registers((2 ** reg_addr_width) - 1 downto 0);
   signal write_reg        : slave_registers((2 ** reg_addr_width) - 1 downto 0);
+  signal read_reg_l       : slave_registers((2 ** reg_addr_width) - 1 downto 0);
 
   signal axi_clk, axi_rstn : std_logic;
   signal pcie_lnk_up       : std_logic := '0';
@@ -46,11 +47,11 @@ architecture arch of top_kcu is
   signal m_axis_c2h_tkeep_0, m_axis_h2c_tkeep_0   : std_logic_vector(31 downto 0);
 
   component vio_0
-  port (
-    clk         : in std_logic;
-    probe_in0   : in std_logic_vector(31 downto 0);
-    probe_in1   : in std_logic_vector(31 downto 0)
-  );
+    port (
+      clk       : in std_logic;
+      probe_in0 : in std_logic_vector(31 downto 0);
+      probe_in1 : in std_logic_vector(31 downto 0)
+    );
   end component;
 
 begin
@@ -160,11 +161,16 @@ begin
   ---------------------------
   -- Debug VIO
   ---------------------------
+  latch_rd_reg : process (read_reg)
+  begin
+    read_reg_l <= read_reg;
+  end process latch_rd_reg;
+
   vio_dbg : vio_0
   port map(
-    clk => axi_clk,
-    probe_in0 => read_reg(0),
-    probe_in1 => read_reg(1)
+    clk       => axi_clk,
+    probe_in0 => read_reg_l(0),
+    probe_in1 => read_reg_l(1)
   );
 
 end architecture;

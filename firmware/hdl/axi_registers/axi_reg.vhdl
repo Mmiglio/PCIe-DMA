@@ -102,6 +102,13 @@ architecture arch_imp of axi_lite_registers is
 	signal aw_en        : std_logic;
 	signal byte_index   : integer;
 
+	-- Local parameter for addressing 32 bit / 64 bit C_S_AXI_DATA_WIDTH
+	-- ADDR_LSB is used for addressing 32/64 bit registers/memories
+	-- ADDR_LSB = 2 for 32 bits (n downto 2)
+	-- ADDR_LSB = 3 for 64 bits (n downto 3)
+	constant ADDR_LSB          : integer := (C_S_AXI_DATA_WIDTH/32) + 1;
+	constant OPT_MEM_ADDR_BITS : integer := C_S_AXI_ADDR_WIDTH - 3;
+
 begin
 	-- I/O Connections assignments
 
@@ -195,16 +202,18 @@ begin
 	slv_reg_wren <= axi_wready and S_AXI_WVALID and axi_awready and S_AXI_AWVALID;
 
 	process (S_AXI_ACLK)
+	variable loc_addr : std_logic_vector(OPT_MEM_ADDR_BITS downto 0); 
 	begin
 		if rising_edge(S_AXI_ACLK) then
 			if S_AXI_ARESETN = '0' then
 				S_WR_REG <= (others => (others => '0'));
 			else
+			  loc_addr := axi_awaddr(OPT_MEM_ADDR_BITS+ADDR_LSB downto ADDR_LSB);
 				if (slv_reg_wren = '1') then
 					-- Decode write-register address
 					bytes_wstrb_loop : for byte_index in 0 to (C_S_AXI_DATA_WIDTH/8) - 1 loop
 						if S_AXI_WSTRB(byte_index) = '1' then
-							S_WR_REG(to_integer(unsigned(axi_awaddr)))(byte_index * 8 + 7 downto byte_index * 8) <= S_AXI_WDATA(byte_index * 8 + 7 downto byte_index * 8);
+							S_WR_REG(to_integer(unsigned(loc_addr)))(byte_index * 8 + 7 downto byte_index * 8) <= S_AXI_WDATA(byte_index * 8 + 7 downto byte_index * 8);
 						end if;
 					end loop;
 				end if;
@@ -294,8 +303,10 @@ begin
 	slv_reg_rden <= axi_arready and S_AXI_ARVALID and (not axi_rvalid);
 
 	process (S_RD_REG, axi_araddr, S_AXI_ARESETN, slv_reg_rden)
+	variable loc_addr : std_logic_vector(OPT_MEM_ADDR_BITS downto 0);
 	begin
-		reg_data_out <= S_RD_REG(to_integer(unsigned(axi_araddr)));
+		loc_addr := axi_awaddr(OPT_MEM_ADDR_BITS+ADDR_LSB downto ADDR_LSB);
+		reg_data_out <= S_RD_REG(to_integer(unsigned(loc_addr)));
 	end process;
 
 	-- Output register or memory read data
