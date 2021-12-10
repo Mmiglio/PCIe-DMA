@@ -1,0 +1,81 @@
+#####################
+## Read registers
+#####################
+
+### Reg 0x0 -> ctrl
+rst_pll_freq:
+  addr: 0x0
+  start: 0
+  width: 1
+
+wr_pll_reg:
+  addr: 0x0
+  start: 1
+  width: 1
+
+rd_pll_reg:
+  addr: 0x0
+  start: 2
+  width: 1
+
+### Regs 0x4, 0x8 si570 regs
+wr_data_pll:
+  - name: reg7
+    addr: 0x4
+    start: 0
+    width: 8
+  - name: reg8
+    addr: 0x4
+    start: 8
+    width: 8
+  - name: reg9
+    addr: 0x4
+    start: 16
+    width: 8
+  - name: reg10
+    addr: 0x4
+    start: 24
+    width: 8
+  - name: reg11
+    addr: 0x8
+    start: 0
+    width: 8
+  - name: reg12
+    addr: 0x8
+    start: 8
+    width: 8
+
+#####################
+## Read registers
+#####################
+### Reg 0x0 and 0x4 value read from the 
+### PLL registers
+rd_data_pll:
+  - name: reg7
+    addr: 0x0
+    start: 0
+    width: 8
+  - name: reg8
+    addr: 0x0
+    start: 8
+    width: 8
+  - name: reg9
+    addr: 0x0
+    start: 16
+    width: 8
+  - name: reg10
+    addr: 0x0
+    start: 24
+    width: 8
+  - name: reg11
+    addr: 0x4
+    start: 0
+    width: 8
+  - name: reg12
+    addr: 0x4
+    start: 8
+    width: 8
+  - name: regsw
+    addr: 0x4
+    start: 16
+    width: 8
