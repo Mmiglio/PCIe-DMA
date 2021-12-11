@@ -1,19 +1,37 @@
+## misc
+
+si570_wr_reg:
+  - data_wr_reg7
+  - data_wr_reg8
+  - data_wr_reg9
+  - data_wr_reg10
+  - data_wr_reg11
+  - data_wr_reg12
+
+si570_rd_reg:
+  - data_rd_reg7
+  - data_rd_reg8
+  - data_rd_reg9
+  - data_rd_reg10
+  - data_rd_reg11
+  - data_rd_reg12
+
 #####################
 ## Read registers
 #####################
 
 ### Reg 0x0 -> ctrl
-rst_pll_reg:
+rst_si570:
   addr: 0x0
   start: 0
   width: 1
 
-wr_pll_reg:
+wr_si570:
   addr: 0x0
   start: 1
   width: 1
 
-rd_pll_reg:
+rd_si570:
   addr: 0x0
   start: 2
   width: 1
@@ -77,16 +95,16 @@ data_rd_reg10:
   width: 8
 
 data_rd_reg11:
-  addr: 0x40
+  addr: 0x44
   start: 0
   width: 8
 
 data_rd_reg12:
-  addr: 0x40
+  addr: 0x44
   start: 8
   width: 8
 
 data_rd_sw:
-  addr: 0x40
+  addr: 0x44
   start: 16
   width: 8
