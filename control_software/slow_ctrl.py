@@ -78,5 +78,9 @@ if __name__ == '__main__':
     for reg_name in reg_cfg['si570_rd_reg']:
         r_val = rw_ctrl.handle_operation(curr_reg=reg_cfg[reg_name], op='r')
         print("reg: {} -> {}".format(reg_name, hex(r_val)))
+    
+    # dump registers
+    rw_ctrl.dump_regs(16)
 
+    # close controller
     rw_ctrl.close()
