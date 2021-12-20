@@ -8,14 +8,13 @@ entity axi_lite_registers is
 		-- Width of S_AXI data bus
 		C_S_AXI_DATA_WIDTH : integer := 32;
 		-- Width of S_AXI address bus
-		-- 2 LSB are reserved for the register internal bytes
 		C_S_AXI_ADDR_WIDTH : integer := 4
 	);
 	port (
 		-- Read registers (32 bits)
-		S_RD_REG : in slave_registers((2 ** C_S_AXI_ADDR_WIDTH) - 1 downto 0);
+		S_RD_REG : in slave_registers(2 ** (C_S_AXI_ADDR_WIDTH - 2) - 1 downto 0);
 		-- Write registers (32 bits) (Slave reg)
-		S_WR_REG : out slave_registers((2 ** C_S_AXI_ADDR_WIDTH) - 1 downto 0);
+		S_WR_REG : out slave_registers(2 ** (C_S_AXI_ADDR_WIDTH - 2) - 1 downto 0);
 
 		-- Global Clock Signal
 		S_AXI_ACLK : in std_logic;
@@ -306,7 +305,7 @@ begin
 	process (S_RD_REG, axi_araddr, S_AXI_ARESETN, slv_reg_rden)
 		variable loc_addr : std_logic_vector(OPT_MEM_ADDR_BITS downto 0);
 	begin
-		loc_addr := axi_awaddr(OPT_MEM_ADDR_BITS + ADDR_LSB downto ADDR_LSB);
+		loc_addr := axi_araddr(OPT_MEM_ADDR_BITS + ADDR_LSB downto ADDR_LSB);
 		reg_data_out <= S_RD_REG(to_integer(unsigned(loc_addr)));
 	end process;
 
