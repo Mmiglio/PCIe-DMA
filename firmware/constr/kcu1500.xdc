@@ -48,3 +48,11 @@ set_property PACKAGE_PIN AT10 [get_ports sysclk_in_n] ;# MGTREFCLK0N
 #set_property LOC PCIE_3_1_X0Y0 [get_cells dma_engine_i/xdma_0_i/inst/pcie3_ip_i/U0/pcie3_uscale_top_inst/pcie3_uscale_wrapper_inst/PCIE_3_1_inst]
 set_property PACKAGE_PIN AR26 [get_ports sys_rst_n] ;
 set_property IOSTANDARD LVCMOS18 [get_ports sys_rst_n] ;
+
+
+set_property PACKAGE_PIN AN24     [get_ports "scl"]
+set_property IOSTANDARD  LVCMOS18 [get_ports "scl"]
+set_property PACKAGE_PIN AP24     [get_ports "sda"]
+set_property IOSTANDARD  LVCMOS18 [get_ports "sda"]
+set_property PACKAGE_PIN AL24     [get_ports "I2C_MAIN_RESET_B_LS"]
+set_property IOSTANDARD  LVCMOS18 [get_ports "I2C_MAIN_RESET_B_LS"]

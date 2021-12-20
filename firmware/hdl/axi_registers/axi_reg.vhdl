@@ -8,6 +8,7 @@ entity axi_lite_registers is
 		-- Width of S_AXI data bus
 		C_S_AXI_DATA_WIDTH : integer := 32;
 		-- Width of S_AXI address bus
+		-- 2 LSB are reserved for the register internal bytes
 		C_S_AXI_ADDR_WIDTH : integer := 4
 	);
 	port (
@@ -202,13 +203,13 @@ begin
 	slv_reg_wren <= axi_wready and S_AXI_WVALID and axi_awready and S_AXI_AWVALID;
 
 	process (S_AXI_ACLK)
-	variable loc_addr : std_logic_vector(OPT_MEM_ADDR_BITS downto 0); 
+		variable loc_addr : std_logic_vector(OPT_MEM_ADDR_BITS downto 0);
 	begin
 		if rising_edge(S_AXI_ACLK) then
 			if S_AXI_ARESETN = '0' then
 				S_WR_REG <= (others => (others => '0'));
 			else
-			  loc_addr := axi_awaddr(OPT_MEM_ADDR_BITS+ADDR_LSB downto ADDR_LSB);
+				loc_addr := axi_awaddr(OPT_MEM_ADDR_BITS + ADDR_LSB downto ADDR_LSB);
 				if (slv_reg_wren = '1') then
 					-- Decode write-register address
 					bytes_wstrb_loop : for byte_index in 0 to (C_S_AXI_DATA_WIDTH/8) - 1 loop
@@ -303,9 +304,9 @@ begin
 	slv_reg_rden <= axi_arready and S_AXI_ARVALID and (not axi_rvalid);
 
 	process (S_RD_REG, axi_araddr, S_AXI_ARESETN, slv_reg_rden)
-	variable loc_addr : std_logic_vector(OPT_MEM_ADDR_BITS downto 0);
+		variable loc_addr : std_logic_vector(OPT_MEM_ADDR_BITS downto 0);
 	begin
-		loc_addr := axi_awaddr(OPT_MEM_ADDR_BITS+ADDR_LSB downto ADDR_LSB);
+		loc_addr := axi_awaddr(OPT_MEM_ADDR_BITS + ADDR_LSB downto ADDR_LSB);
 		reg_data_out <= S_RD_REG(to_integer(unsigned(loc_addr)));
 	end process;
 
